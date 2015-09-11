@@ -45,17 +45,28 @@ angular.module('NgSwitchery', [])
                 // (re)create switcher to reflect latest state of the checkbox element
                 switcher = new $window.Switchery(elem[0], options);
                 var element = switcher.element;
-                element.checked = scope.initValue;
-                switcher.setPosition(false);
+                changeState(switcher, scope.initValue)
+
                 element.addEventListener('change',function(evt) {
                     scope.$apply(function() {
                         ngModel.$setViewValue(element.checked);
                     })
                 })
+                scope.$watch('initValue', function(value){
+                  changeState(switcher, value)
+                })
               }, 0);
             }
+            
+            function changeState(switcher, value){
+                var element = switcher.element;
+                element.checked = value;
+                switcher.setPosition(false);
+            }
+
             initializeSwitch();
           }
+
 
         return {
             require: 'ngModel',
